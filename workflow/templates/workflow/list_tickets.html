@@ -1,0 +1,40 @@
+ 
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content%}
+    <div class="container">
+
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Submitted by</th>
+                <th scope="col">Engineer</th>
+                <th scope="col">Equipment</th>
+                <th scope="col">Ticket Type</th>
+                <th scope="col">Ticket Status</th>
+                <!-- <th scope="c</th> -->
+              </tr>
+            </thead>
+            <tbody>
+                {% for ticket in object_list %}
+                    {% if ticket.status == 'OPEN' %}
+                        <tr>
+                            <td>{{ ticket.submitter.first_name }} {{ticket.submitter.last_name}}</td>
+                            <td>{{ ticket.user.first_name }} {{ticket.user.last_name}}</td>
+                            <td>{{ ticket.equipment }}</td>
+                            <td>{{ ticket.ticket_type }}</td>
+                            <td>{{ ticket.status }}</td>
+                            {% if user.type == 'MANAGER'%} 
+                            <td><a href="{% url 'assign-engineer' ticket.id%}"><button class="btn" type="submit">Assign to</button></a></td>                                  
+                            {% else %}
+                                <td><button class='btn'>Take</button></td>
+                            {% endif %}
+                        </tr>
+                        {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
+    
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content%}
+    <div class="container">
+
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
+                <th scope="col">Hospital</th>
+                <th scope="col">Boss</th>
+                <!-- <th scope="c</th> -->
+              </tr>
+            </thead>
+            <tbody>
+                {% for emp in object_list %}
+              <tr>
+                <td>{{ emp.first_name }} {{emp.last_name}}</td>
+                <td>{{ emp.email }}</td>
+                <td>{{ emp.type }}</td>
+                <td>{{ emp.current_hospital }}</td>
+                <td>{{emp.current_hospital.manager.first_name}} {{emp.current_hospital.manager.last_name}}</td>
+                <td><a href="#"><button class='btn'>Fire</button></a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
+    
+{% endblock %}

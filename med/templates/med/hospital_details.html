@@ -1,0 +1,21 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %} 
+<h1>{{ hospital.name }} Details...</h1>
+<p name = 'h'>Name: {{ hospital.name }}</p>
+<p>address: {{ hospital.address }}</p>
+<p>phone number: {{ hospital.phone_num }}</p>
+<p>Departments : <br></p>
+<ul>
+    {% for dep in hospital.department_set.all %}
+        <li>{{ dep.name }}</li>
+    {% endfor %}
+</ul>
+
+<form action="{% url 'join-hospital' hospital.id %}" method=POST>
+    {% csrf_token %}
+    <button id="approve-btn" type="submit">Join Hospital</button>
+</form>
+<!-- <button class='btn'><a href="{% url 'join-hospital' hospital.id %}">Join Hospital</a></button> -->
+
+{% endblock content %}

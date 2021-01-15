@@ -1,0 +1,23 @@
+{% extends "dashboard/base.html" %}
+
+{% block content%}
+    <div class="container">
+        <h1>Search Results : </h1>
+
+    <ul class="navbar-nav ml-auto">
+    {% for hospital in object_list %}
+        <h4>
+            <a href="{% url 'hospital-details' hospital.id %}">
+                <li class ="nav-item">
+                    Hospital name : {{ hospital.name }}<br>
+                    Hospital Address : {{ hospital.pk }}
+                </li>
+                <br>
+            </a>
+        </h4>    
+    {% endfor %}
+    </ul>
+
+    </div>
+    
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content%}
+    <div class="container">
+
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Engineer</th>
+                <th scope="col">Equipment</th>
+                <th scope="col">Ticket Type</th>
+                <th scope="col">Ticket Status</th>
+                <th scope="col">Ticket Details</th>
+                <th scope="col">Time Response(Days:Hours:Seconds)</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for ticket in object_list %}
+              <tr>
+                <td>{{ ticket.user.first_name }} {{ticket.user.last_name}}</td>
+                <td>{{ ticket.equipment }}</td>
+                <td>{{ ticket.ticket_type }}</td>
+                <td>{{ ticket.status }}</td>
+                <td><a href="{% url 'ticket-details' ticket.id %}"><button class="btn">View Details</button></a></td>
+                <td>{{ ticket.response_time }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
+    
+{% endblock %}

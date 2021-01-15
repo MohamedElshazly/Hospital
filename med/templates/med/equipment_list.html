@@ -1,0 +1,34 @@
+{% extends "dashboard/base.html" %}
+
+{% block content%}
+    <div class="container">
+        <h1>Equipment List</h1>
+
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Equipment</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Details</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for equipment in object_list %}
+                    <tr>
+                        <td>{{ equipment.id }}</td>
+                        <td>{{ equipment.name }}</td>
+                        <td> {{ equipment.department.name}}</td>
+                        <td><a href="{% url 'equipment-details' equipment.id %}"><button class="btn">View Details</button></a></td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>   
+    
+
+    </div>
+    
+{% endblock %}

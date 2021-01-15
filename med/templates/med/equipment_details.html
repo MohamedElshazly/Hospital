@@ -1,0 +1,49 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %} 
+
+<div class="container">
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Equipment</th>
+            <th scope="col">Department</th>
+            <th scope="col">Serial Number</th>
+            <th scope="col">Technical Specs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ equipment.id }}</td>
+            <td>{{ equipment.name }}</td>
+            <td> {{ equipment.department.name}}</td>
+            <td>{{ equipment.serial_num }}</td>
+            <td>{{ equipment.specs }}</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+
+{% if user.type == 'DOCTOR' %}
+    {% if equipment.status == 'LIVE' %}
+        <button class="btn"><a href="{% url 'submit-ticket-id' equipment.id %}">Submit Issue</a></button> 
+    {% else %}
+        <p>**UNDER MAINTENANCE**</p> 
+    {% endif %}
+{% endif %}
+
+<!-- {% if user.type == 'ENGINEER' %}
+    <a href="{% url 'get-pdf' equipment.id%}"><button class="btn">Download PDF</button></a>
+    {% if equipment.id == ticket.equipment.id and ticket.user.id == user.id and ticket.status == 'OPEN' %}
+        {% if engineer.start_time == 0 %}
+            <a href="{% url 'work-process' 1 ticket.id %}"><button class='btn btn-blue'>Start</button></a>
+        {% else %}
+            <a href="{% url 'work-process' 0 ticket.id %}"><button class='btn btn-danger'>End</button></a>
+        {% endif %}
+    {% endif %}
+{% endif %}
+ -->
+
+{% endblock content %}

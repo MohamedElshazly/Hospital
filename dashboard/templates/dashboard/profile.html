@@ -1,0 +1,18 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+      <div class="media">
+        <div class="media-body">
+          <h2 class="account-heading">{{ user.username }}</h2>
+          <p class="text-secondary">{{ user.email }}</p>
+          {% if user.type == 'ENGINEER' or user.type == 'DOCTOR' %}
+            {% if user.in_hospital %}
+              <a href="{% url 'hospital-details' user.current_hospital.id %}"><p class="text-valid">{{ user.current_hospital }}</p></a>
+            {% endif %}
+          {% endif %}
+          <a href="{% url 'update' %}">Edit</a>
+        </div>
+      </div>
+    </div>
+{% endblock content %}
