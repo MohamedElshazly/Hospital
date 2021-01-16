@@ -7,7 +7,9 @@ from .views import (
                     Engineer_Work, 
                     List_Employees,
                     Work_Process,
-                    Ticket_Details)
+                    Ticket_Details, 
+                    Add_Department,
+                    Add_Equipment)
 
 urlpatterns = [
     path('submit-ticket/', Submit_Ticket.as_view(), name='submit-ticket'),
@@ -17,5 +19,7 @@ urlpatterns = [
     path('assign-engineer/<int:pk>/', Assign_Engineer.as_view(), name = 'assign-engineer'),
     path('engineer_work/', Engineer_Work.as_view(), name = 'eng-work'),
     path('list-employees/', List_Employees.as_view(), name = 'list-employees'),
-    path('work-process/<int:pk>/<int:pk2>', Work_Process, name='work-process')
+    path('work-process/<int:pk>/<int:pk2>', Work_Process, name='work-process'),
+    path('add-department/', Add_Department.as_view(), name='add-department'),
+    path('add-equipment/', Add_Equipment.as_view(), name='add-equipment')
 ]

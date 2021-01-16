@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.views.generic import CreateView, ListView, UpdateView, DetailView 
 from workflow.models import Ticket
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import TicketForm, TicketFormID, AssignEng
+from .forms import TicketForm, TicketFormID, AssignEng, AddDepartmentForm, AddEquipmentForm
 from django.urls import reverse_lazy
-from med.models import Doctor, Engineer, Equipment, Manager
+from med.models import Department, Doctor, Engineer, Equipment, Manager
 from authentication.models import User
 import time, datetime
 # from authentication.models import Engineer
@@ -22,7 +22,7 @@ class Submit_Ticket(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        form.instance.submitter = self.request.user
+        form.instance.submitter = Doctor.objects.get(id = self.request.user.id)
         doc = Doctor.objects.get(id = self.request.user.id)
         doc_hos = doc.current_hospital
         eq = doc_hos.equipment_set.filter(name = form.instance.equipment).first()
@@ -42,7 +42,7 @@ class Submit_Ticket_Using_Id(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        form.instance.submitter = self.request.user
+        form.instance.submitter = Doctor.objects.get(id = self.request.user.id)
         eq = Equipment.objects.get(id = self.kwargs['pk'])
         eq.status = 'DOWN'
         eq.save()
@@ -163,4 +163,46 @@ def Work_Process(request, pk, pk2):
     return redirect('eng-work') 
 
 
+class Add_Department(LoginRequiredMixin, CreateView):
+    model = Department
+    template_name = 'workflow/add_dep.html'
+    form_class = AddDepartmentForm
+    context_object_name = 'dep' 
+    success_url = reverse_lazy('add-department')
+
+    def form_valid(self, form):
+        form.instance.hospital = Engineer.objects.get(id = self.request.user.id).current_hospital
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super(Add_Department, self).get_context_data(**kwargs)
+        eng = Engineer.objects.get(id = self.request.user.id)
+        context['departments'] = Department.objects.filter(hospital = eng.current_hospital)
+        return context
+
+class Add_Equipment(LoginRequiredMixin, CreateView):
+    model = Equipment
+    template_name = 'workflow/add_equip.html'
+    form_class = AddEquipmentForm
+    # context_object_name = 'equip' 
+    success_url = reverse_lazy('add-department')
+
+    
+    def get_form_kwargs(self):
+            kwargs = super(Add_Equipment, self).get_form_kwargs()
+            kwargs.update({'request': self.request})
+            return kwargs
+
+    def form_valid(self, form):
+        form.instance.hospital = Engineer.objects.get(id = self.request.user.id).current_hospital
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super(Add_Equipment, self).get_context_data(**kwargs)
+        eng = Engineer.objects.get(id = self.request.user.id)
+        context['equipment'] = Equipment.objects.filter(hospital = eng.current_hospital)
+        return context
+
+    
+    
 
