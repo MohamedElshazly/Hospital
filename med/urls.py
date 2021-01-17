@@ -4,7 +4,8 @@ from med.views import (CreateHospitalView,
                         SearchHospitalResultsView, 
                         SearchHospitalView, 
                         EquipmentListView, 
-                        EquipmentDetailsView, 
+                        EquipmentDetailsView,
+                        NotificationsListView, 
                         generate_PDF)
 
 urlpatterns = [
@@ -14,5 +15,6 @@ urlpatterns = [
     path('equipment-list/', EquipmentListView.as_view(), name ='equipment-list'),
     path('hospital-details/<int:pk>/', HospitalDetailsView.as_view(), name ='hospital-details'),
     path('equipment-details/<int:pk>/', EquipmentDetailsView.as_view(), name ='equipment-details'),
+    path('list-notifications/', NotificationsListView.as_view(), name ='list-notifications'),
     path('get-pdf/<int:pk>/', generate_PDF, name ='get-pdf')
 ]

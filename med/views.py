@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, TemplateView, ListView, DetailView, UpdateView
-from .models import Engineer, Hospital, Doctor, Equipment, Manager
+from .models import Engineer, Hospital, Doctor, Equipment, Manager, Notifications
 from .forms import HospitalForm
 from django.urls import reverse_lazy
 from django.db.models import Q
@@ -82,21 +82,44 @@ class EquipmentDetailsView(LoginRequiredMixin, DetailView):
         return context
 
 
-def JoinHospitalView(request, pk):
-    if(request.user.type == 'ENGINEER'):
-        eng = Engineer.objects.get(id = request.user.id)
-        eng.current_hospital = Hospital.objects.get(id=pk)
-        eng.in_hospital = True
+def JoinHospitalView(request, uid):
+    man = Manager.objects.get(id = request.user.id)
+    user = User.objects.get(id = uid)
+    try:
+        eng = Engineer.objects.get(id = uid)
+        eng.is_approved = True 
+        eng.current_hospital = man.hospital
+        Notifications.objects.get(user = user).delete() 
         eng.save()
         return redirect('home')
-    if(request.user.type == 'DOCTOR'):
-        doc = Doctor.objects.get(id = request.user.id)
-        doc.current_hospital = Hospital.objects.get(id=pk)
-        doc.in_hospital = True
+    except:
+        doc = Doctor.objects.get(id = uid)
+        doc.is_approved = True 
+        doc.current_hospital = man.hospital 
+        Notifications.objects.get(user = user).delete() 
         doc.save()
         return redirect('home')
-    
 
+def RequestJoinHospitalView(request, hid, uid):
+    user = User.objects.get(id = uid)
+    hospital = Hospital.objects.get(id = hid)
+    Notifications.objects.create(user=user, hospital=hospital)
+    return redirect('home')
+
+class NotificationsListView(LoginRequiredMixin, ListView):
+    model = Notifications
+    template_name = 'med/list_notifications.html'
+
+    def get_queryset(self):
+        man_hos = Manager.objects.get(id = self.request.user.id).hospital
+        print(man_hos)
+        object_list = Notifications.objects.filter(hospital=man_hos)
+        return object_list
+
+
+
+    #Add a test 
+    
 class CreateHospitalView(LoginRequiredMixin, CreateView):
     model = Hospital
     template_name = 'med/register_hospital.html'

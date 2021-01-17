@@ -12,10 +12,9 @@
     {% endfor %}
 </ul>
 
-<form action="{% url 'join-hospital' hospital.id %}" method=POST>
+<form action="{% url 'request-join-hospital' hospital.id user.id %}" method=POST>
     {% csrf_token %}
-    <button id="approve-btn" type="submit">Join Hospital</button>
+    <button class='btn' id="approve-btn" type="submit">Join Hospital</button>
 </form>
-<!-- <button class='btn'><a href="{% url 'join-hospital' hospital.id %}">Join Hospital</a></button> -->
 
 {% endblock content %}

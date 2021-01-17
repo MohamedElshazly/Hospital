@@ -61,7 +61,10 @@ class DoctorManager(BaseUserManager):
         return super().get_queryset(*args, **kwargs).filter(type=User.Types.DOCTOR)
 
 
-    
+
+class Notifications(models.Model):
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
 
 class Manager(User):
     objects = ManagerManager()
@@ -70,6 +73,7 @@ class Manager(User):
         return self.username
         
 class Engineer(User):
+    is_approved = models.BooleanField(_("Approved"), default=False)
     current_hospital = models.ForeignKey(Hospital, null=True, on_delete=models.CASCADE) #should it be cascade?
     is_busy = models.BooleanField(_("Busy"), default=False)
     total_orders = models.IntegerField(_("Total Work Orders"), default=0)
@@ -84,6 +88,7 @@ class Engineer(User):
         return self.username
 
 class Doctor(User):
+    is_approved = models.BooleanField(_("Approved"), default=False)
     current_hospital = models.ForeignKey(Hospital, null=True, on_delete=models.CASCADE) #should it be cascade?
     objects = DoctorManager()
     
