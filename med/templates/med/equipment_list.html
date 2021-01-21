@@ -5,7 +5,7 @@
         <h1>Equipment List</h1>
 
         <div class="container">
-            <table class="table">
+            <table class="table table-striped table-hover">
                 <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -20,7 +20,7 @@
                         <td>{{ equipment.id }}</td>
                         <td>{{ equipment.name }}</td>
                         <td> {{ equipment.department.name}}</td>
-                        <td><a href="{% url 'equipment-details' equipment.id %}"><button class="btn">View Details</button></a></td>
+                        <td><a href="{% url 'equipment-details' equipment.id %}"><button class="btn btn-primary">View Details</button></a></td>
                     </tr>
                 {% endfor %}
 

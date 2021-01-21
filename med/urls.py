@@ -5,7 +5,8 @@ from med.views import (CreateHospitalView,
                         SearchHospitalView, 
                         EquipmentListView, 
                         EquipmentDetailsView,
-                        NotificationsListView, 
+                        NotificationsListView,
+                        DepartmentListView, 
                         generate_PDF)
 
 urlpatterns = [
@@ -13,6 +14,7 @@ urlpatterns = [
     path('search/', SearchHospitalView.as_view(), name ='hospital-search'),
     path('search-results/', SearchHospitalResultsView.as_view(), name ='hospital-search-results'),
     path('equipment-list/', EquipmentListView.as_view(), name ='equipment-list'),
+    path('department-list/', DepartmentListView.as_view(), name ='department-list'),
     path('hospital-details/<int:pk>/', HospitalDetailsView.as_view(), name ='hospital-details'),
     path('equipment-details/<int:pk>/', EquipmentDetailsView.as_view(), name ='equipment-details'),
     path('list-notifications/', NotificationsListView.as_view(), name ='list-notifications'),

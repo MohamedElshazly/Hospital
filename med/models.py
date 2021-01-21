@@ -63,8 +63,8 @@ class DoctorManager(BaseUserManager):
 
 
 class Notifications(models.Model):
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    hospital = models.ForeignKey(Hospital, null=True, on_delete=models.CASCADE)
 
 class Manager(User):
     objects = ManagerManager()

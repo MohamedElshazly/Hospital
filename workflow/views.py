@@ -168,7 +168,7 @@ class Add_Department(LoginRequiredMixin, CreateView):
     template_name = 'workflow/add_dep.html'
     form_class = AddDepartmentForm
     context_object_name = 'dep' 
-    success_url = reverse_lazy('add-department')
+    success_url = reverse_lazy('department-list')
 
     def form_valid(self, form):
         form.instance.hospital = Engineer.objects.get(id = self.request.user.id).current_hospital

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, TemplateView, ListView, DetailView, UpdateView
-from .models import Engineer, Hospital, Doctor, Equipment, Manager, Notifications
+from .models import Engineer, Hospital, Doctor, Equipment, Manager, Notifications, Department
 from .forms import HospitalForm
 from django.urls import reverse_lazy
 from django.db.models import Q
@@ -47,6 +47,26 @@ class EquipmentListView(LoginRequiredMixin, ListView):
             # object_list = [eq for q1 in dep_list for eq in q1.equipment_set.all()]
             return object_list
 
+class DepartmentListView(LoginRequiredMixin, ListView):
+    model = Department
+    template_name = 'med/department_list.html'
+
+    def get_queryset(self):
+        if(self.request.user.type == 'ENGINEER'):
+            eng = Engineer.objects.get(id = self.request.user.id)
+            eng_hos = eng.current_hospital 
+            object_list = eng_hos.department_set.all()
+            return object_list
+        elif(self.request.user.type == 'DOCTOR'):
+            doc = Doctor.objects.get(id = self.request.user.id)
+            doc_hos = doc.current_hospital 
+            object_list = doc_hos.department_set.all()
+            return object_list
+        else:
+            man = Manager.objects.get(id = self.request.user.id)
+            object_list = man.hospital.department_set.all()
+            return object_list
+
 class  SearchHospitalResultsView(LoginRequiredMixin, ListView):
     model = Hospital
     template_name = 'med/hospital_search_results.html'
@@ -89,15 +109,19 @@ def JoinHospitalView(request, uid):
         eng = Engineer.objects.get(id = uid)
         eng.is_approved = True 
         eng.current_hospital = man.hospital
+        user.in_hospital = True
         Notifications.objects.get(user = user).delete() 
         eng.save()
+        user.save()
         return redirect('home')
     except:
         doc = Doctor.objects.get(id = uid)
         doc.is_approved = True 
-        doc.current_hospital = man.hospital 
+        doc.current_hospital = man.hospital        
+        user.in_hospital = True 
         Notifications.objects.get(user = user).delete() 
         doc.save()
+        user.save()
         return redirect('home')
 
 def RequestJoinHospitalView(request, hid, uid):
