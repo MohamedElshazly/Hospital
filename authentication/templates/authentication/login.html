@@ -1,29 +1,32 @@
-{% extends "dashboard/base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 
+<!doctype html>
+<html lang="en">
 
-{% block content %}
-<div class="container">
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="from-group">
-                <legend class="border-bottom mb-4">Sign In!</legend>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Sign In</button>
-            </div>
-    
-        </form>
-    
-        <div class="border-top pt-3">
-            <small class="muted-text">
-               Need An Account ? <a href="{% url 'register' %}" class="ml-2">Sign Up</a> 
-            </small>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Signin</title>
+    <link href="{% static 'dashboard/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/signin.css' %}" rel="stylesheet">
+</head>
+
+<body class="text-center">
+    <form class="form-signin" method="POST">
+        {% csrf_token %}
+        <img class="mb-4" src="{% static 'dashboard/Untitled-1-01.png' %}" alt="" width="150" height="150">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        {{ form|crispy }}
+        <div class="checkbox mb-3">
+            <label>
+      <input type="checkbox" value="remember-me"> Remember me
+    </label>
         </div>
-    </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2020-2021</p>
+    </form>
+</body>
 
-</div>
-
-{% endblock %}
+</html>
