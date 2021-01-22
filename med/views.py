@@ -127,8 +127,17 @@ def JoinHospitalView(request, uid):
 def RequestJoinHospitalView(request, hid, uid):
     user = User.objects.get(id = uid)
     hospital = Hospital.objects.get(id = hid)
-    Notifications.objects.create(user=user, hospital=hospital)
-    return redirect('home')
+    try :
+        #check if use already submitted a request, and delete it if he did
+        Notifications.objects.get(user=user).delete()
+        #create new notification
+        Notifications.objects.create(user=user, hospital=hospital)
+        return redirect('home')
+    except:
+        #if he didn't already have a request, just create a new one
+        Notifications.objects.create(user=user, hospital=hospital)
+        return redirect('home')
+        
 
 class NotificationsListView(LoginRequiredMixin, ListView):
     model = Notifications
@@ -136,7 +145,6 @@ class NotificationsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         man_hos = Manager.objects.get(id = self.request.user.id).hospital
-        print(man_hos)
         object_list = Notifications.objects.filter(hospital=man_hos)
         return object_list
 

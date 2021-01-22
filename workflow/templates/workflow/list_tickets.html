@@ -4,13 +4,14 @@
 
 {% block content%}
     <div class="container">
-
+      <h2 class="border-top mb-4">Work Orders</h2>
         <table class="table table-striped table-hover">
             <thead>
               <tr>
                 <th scope="col">Submitted by</th>
                 <th scope="col">Engineer</th>
                 <th scope="col">Equipment</th>
+                <th scope="col">Department</th>
                 <th scope="col">Ticket Type</th>
                 <th scope="col">Ticket Status</th>
                 <th scope="col">Time Response</th>
@@ -23,7 +24,8 @@
                         <tr>
                             <td>{{ ticket.submitter.first_name }} {{ticket.submitter.last_name}}</td>
                             <td>{{ ticket.user.first_name }} {{ticket.user.last_name}}</td>
-                            <td>{{ ticket.equipment }}</td>
+                            <td><a href="{% url 'equipment-details' ticket.equipment.id %}">{{ ticket.equipment }}</a></td>
+                            <td>{{ ticket.equipment.department }}</td>
                             <td>{{ ticket.ticket_type }}</td>
                             <td>{{ ticket.status }}</td>
                             <td>{{ ticket.response_time }}</td>

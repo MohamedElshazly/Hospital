@@ -2,6 +2,8 @@ from django import forms
 from .models import Ticket
 from med.models import Equipment
 from med.models import Department, Doctor, Engineer, Manager
+from django.shortcuts import get_object_or_404
+
 
 class CustomMCF(forms.ModelChoiceField):
     def label_from_instance(self, equipment):
@@ -14,7 +16,7 @@ class ENGCustomMCF(forms.ModelChoiceField):
 class TicketForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
-        doc_hos = Doctor.objects.get(id = self.request.user.id).current_hospital
+        doc_hos = get_object_or_404(Doctor,id = self.request.user.id).current_hospital
         super(TicketForm, self).__init__(*args, **kwargs)
         self.fields['equipment'].queryset = doc_hos.equipment_set.filter(status = 'LIVE') 
 
