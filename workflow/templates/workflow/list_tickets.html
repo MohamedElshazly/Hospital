@@ -4,10 +4,22 @@
 
 {% block content%}
     <div class="container">
-      <h2 class="border-top mb-4">Work Orders</h2>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Work Orders</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary">Help</button>
+            </div>
+            <div class="btn-group mr-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
+            </div>
+        </div>
+    </div>
+      <!-- <h2 class="border-top mb-4">Work Orders</h2> -->
         <table class="table table-striped table-hover">
             <thead>
               <tr>
+                <th scope="col">Service Request Number</th>
                 <th scope="col">Submitted by</th>
                 <th scope="col">Engineer</th>
                 <th scope="col">Equipment</th>
@@ -22,6 +34,7 @@
                 {% for ticket in object_list %}
                     
                         <tr>
+                            <td>{{ ticket.id }}</td>
                             <td>{{ ticket.submitter.first_name }} {{ticket.submitter.last_name}}</td>
                             <td>{{ ticket.user.first_name }} {{ticket.user.last_name}}</td>
                             <td><a href="{% url 'equipment-details' ticket.equipment.id %}">{{ ticket.equipment }}</a></td>
@@ -42,6 +55,11 @@
               {% endfor %}
             </tbody>
           </table>
+          {% if user.type == 'MANAGER' %}
+          <div class="d-grid gap-2 col-3 mx-auto">
+            <a href="{% url 'staff-response' %}"><button class="btn btn-primary">Staff Response</button></a>
+          </div>
+          {% endif %}
     </div>
     
 {% endblock %}

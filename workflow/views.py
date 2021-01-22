@@ -146,6 +146,16 @@ class List_Employees(LoginRequiredMixin, ListView):
         object_list += [doc for doc in docs]
         return object_list
 
+class Staff_Response(LoginRequiredMixin, ListView):
+    model = User
+    template_name ='workflow/staff_response.html'
+
+    def get_queryset(self):
+        current_man = Manager.objects.get(id = self.request.user.id)
+        engs = current_man.hospital.engineer_set.all()
+        object_list = [eng for eng in engs]
+        return object_list
+
 
 def Work_Process(request, pk, pk2):
     eng = Engineer.objects.get(id = request.user.id)
