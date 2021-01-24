@@ -30,7 +30,30 @@
 <div class="container">
   <a href="{% url 'eng-work' %}"><button class='btn btn-primary'>View Your Work Orders</button></a>
 </div>
-{% else %}
+{% elif user.type == 'MANAGER' %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Role</th>
+      <th scope="col">Email</th>
+      <th scope="col">Approve</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for request in user.hospital.notifications_set.all %}
+    <tr>
+      <td>{{ request.id }}</td>
+      <td>{{ request.user.first_name }} {{ request.user.last_name }}</td>
+      <td> {{ request.user.type}}</td>
+      <td> {{ request.user.email}}</td>
+      <td><a href="{% url 'join-hospital' request.user.id %}"><button class="btn btn-primary">Approve</button></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 
 {% endif %}
 {% endblock %}

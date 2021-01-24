@@ -26,6 +26,7 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
+    
 
 class Equipment(models.Model):
     STATUS = (
@@ -36,13 +37,24 @@ class Equipment(models.Model):
     name = models.CharField(_("Equipment Name"), max_length = 225, unique=True) #unique=True
     specs = models.TextField(_("Technical Specifications and Standards"))
     quantity = models.IntegerField()
-    serial_num = models.IntegerField(unique = True)#add unique = True
-    # belongs_to = models.CharField(_("Department"), max_length=255, null=True)
+    serial_num = models.IntegerField()
+    manufacturer = models.CharField(_("Manufacturer"), null=True,max_length = 255)
+    country = models.CharField(_("Country"), null=True,max_length = 225)
+    model = models.CharField(_("Model"), null=True,max_length = 225)
+    risk_level = models.CharField(_("Risk Level"), null=True,max_length = 225)
+    eq_class = models.CharField(_("class"), null=True,max_length = 225)
+    bio_code = models.CharField(_("BioCode"), null=True, max_length = 225)
+    med_agent = models.CharField(_("Medical Agent"),null=True, max_length = 225)
+    delivery_date = models.DateField(_("Delivery Date"),null=True)
+    warrenty_date = models.DateField(_("End Warrenty Date"),null=True)
     department = models.ForeignKey(Department, null = True, on_delete=models.SET_NULL)
     hospital = models.ForeignKey(Hospital, null = True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('equipment-details', kwargs={'pk' : self.pk})
 
 
 
@@ -94,3 +106,13 @@ class Doctor(User):
     
     def __str__(self):
         return self.username
+
+class Company(models.Model):
+    name = models.CharField(_("Company Name"), max_length = 225)
+    email = models.EmailField(_("Company Email"))
+    phone_num = models.CharField(_("Phone Number"), max_length=225)
+    hospital = models.ForeignKey(Hospital, null=True, on_delete=models.CASCADE) #should it be cascade?
+    
+
+    def __str__(self):
+        return self.name

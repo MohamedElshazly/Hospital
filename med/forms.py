@@ -1,6 +1,6 @@
 from django import forms
 # from authentication.models import 
-from .models import Department, Equipment, Engineer, Hospital
+from .models import Department, Equipment, Engineer, Hospital, Company
 
 
 class CustomMMCF(forms.ModelMultipleChoiceField):
@@ -31,4 +31,11 @@ class JoinHospitalForm(forms.ModelForm):
         fields = ['username']
     username = forms.CharField()    
    
+class CreateCompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['name', 'email', 'phone_num']
     
+    name = forms.CharField()
+    email = forms.EmailField()
+    phone_num = forms.CharField()

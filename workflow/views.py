@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, ListView, UpdateView, DetailView 
 from workflow.models import Ticket
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import TicketForm, TicketFormID, AssignEng, AddDepartmentForm, AddEquipmentForm
+from .forms import TicketForm, TicketFormID, AssignEng, AddDepartmentForm, AddEquipmentForm, DepartmentUpdateForm, EquipmentUpdateForm
 from django.urls import reverse_lazy
 from med.models import Department, Doctor, Engineer, Equipment, Manager
 from authentication.models import User
 import time, datetime
+from django.contrib.auth.decorators import login_required
+
 
 class Submit_Ticket(LoginRequiredMixin, CreateView):
     model = Ticket
@@ -197,6 +199,40 @@ class Add_Department(LoginRequiredMixin, CreateView):
         eng = Engineer.objects.get(id = self.request.user.id)
         context['departments'] = Department.objects.filter(hospital = eng.current_hospital)
         return context
+
+@login_required
+def update_department(request, pk):
+    dep = Department.objects.get(id = pk)
+    if request.method == 'POST':
+        d_form = DepartmentUpdateForm(request.POST, instance=dep)
+        if d_form.is_valid():
+            d_form.save()
+            # messages.success(request, f'Account Info Updated!!')
+            return redirect('department-list')
+              
+    d_form = DepartmentUpdateForm(instance=dep)
+
+    context = {
+            'd_form' : d_form
+            }
+    return render(request, "workflow/edit_dep.html", context)
+
+@login_required
+def update_equipment(request, pk):
+    equip = Equipment.objects.get(id = pk)
+    if request.method == 'POST':
+        e_form = EquipmentUpdateForm(request.POST, instance=equip)
+        if e_form.is_valid():
+            e_form.save()
+            # messages.success(request, f'Account Info Updated!!')
+            return redirect('equipment-details', pk = pk)
+              
+    e_form = EquipmentUpdateForm(instance=equip)
+
+    context = {
+            'e_form' : e_form
+            }
+    return render(request, "workflow/edit_equip.html", context)  
 
 class Add_Equipment(LoginRequiredMixin, CreateView):
     model = Equipment

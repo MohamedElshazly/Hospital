@@ -15,7 +15,8 @@ def home(request):
             return render(request, template_name='dashboard/home.html', context={'user' : doc})
     except:
         return render(request, template_name='dashboard/home.html')
-    return render(request, template_name='dashboard/home.html')
+    man = Manager.objects.get(id = request.user.id)
+    return render(request, template_name='dashboard/home.html', context={'user' : man})
     
 @login_required
 def profile(request):

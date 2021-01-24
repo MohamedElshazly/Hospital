@@ -22,6 +22,8 @@ class Ticket(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     status = models.CharField(_("Status"), max_length = 50, choices = STATUS, default='OPEN')
     response_time = models.DurationField(_("Reponse Time"), default=datetime.timedelta(0))
+    details = models.TextField(_("Problem Details"), null=True)
+    # img = models.ImageField(_("Equipment Picture"), upload_to='tickets_images', null=True)
 
     def __str__(self):
         return self.user.username

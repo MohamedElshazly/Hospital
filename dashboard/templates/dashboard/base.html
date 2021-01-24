@@ -122,11 +122,13 @@
               </a>
             </h6>
             <ul class="nav flex-column mb-2">
+              {% if user.type == 'ENGINEER' %}
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'list-create-company' %}">
                   <span data-feather="file-text"></span> Connect with companies
                 </a>
               </li>
+              {% endif %}
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="file-text"></span> Send Mail

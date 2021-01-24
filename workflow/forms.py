@@ -22,7 +22,7 @@ class TicketForm(forms.ModelForm):
 
     class Meta:
         model = Ticket
-        fields = ['equipment', 'ticket_type']
+        fields = ['equipment', 'ticket_type', 'details']
 
     
     
@@ -33,7 +33,9 @@ class TicketForm(forms.ModelForm):
     )
 
    
-    
+    # img = forms.ImageField()
+    details = forms.Textarea()
+
     equipment = CustomMCF(
         queryset= None, 
         widget = forms.Select
@@ -43,7 +45,7 @@ class TicketForm(forms.ModelForm):
 class TicketFormID(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ['ticket_type', 'status']
+        fields = ['ticket_type', 'details']
     
     
     ticket_type = forms.ChoiceField(
@@ -51,10 +53,10 @@ class TicketFormID(forms.ModelForm):
         widget = forms.Select
     )
 
-    status = forms.ChoiceField(
-        choices=Ticket.STATUS,
-        widget = forms.Select
-    )
+    # img = forms.ImageField()
+    details = forms.Textarea()
+
+
 
 class AssignEng(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -80,6 +82,18 @@ class AddDepartmentForm(forms.ModelForm):
     
     name = forms.CharField(max_length=100)
 
+class DepartmentUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Department 
+        fields = ['name']
+
+class EquipmentUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Equipment 
+        fields = ['name', 'specs', 'quantity', 'serial_num', 'manufacturer', 'country', 'model', 'risk_level', 'eq_class', 'bio_code', 'med_agent', 'delivery_date', 'warrenty_date','department']
+
 class AddEquipmentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -90,7 +104,7 @@ class AddEquipmentForm(forms.ModelForm):
     
     class Meta:
         model = Equipment
-        fields = ['name', 'specs', 'quantity', 'serial_num', 'department']
+        fields = ['name', 'specs', 'quantity', 'serial_num', 'manufacturer', 'country', 'model', 'risk_level', 'eq_class', 'bio_code', 'med_agent', 'delivery_date', 'warrenty_date','department']
     
     name = forms.CharField(max_length=100)
     specs = forms.Textarea()

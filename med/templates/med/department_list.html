@@ -10,6 +10,7 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Department</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -17,6 +18,7 @@
                     <tr>
                         <td>{{ department.id }}</td>
                         <td>{{ department.name }}</td>
+                        <td><a href="{% url 'edit-department' department.id %}">Edit</a></td>
                     </tr>
                 {% endfor %}
 

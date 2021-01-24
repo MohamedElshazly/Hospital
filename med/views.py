@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, TemplateView, ListView, DetailView, UpdateView
-from .models import Engineer, Hospital, Doctor, Equipment, Manager, Notifications, Department
-from .forms import HospitalForm
+from .models import Engineer, Hospital, Doctor, Equipment, Manager, Notifications, Department, Company
+from .forms import HospitalForm, CreateCompanyForm
 from django.urls import reverse_lazy
 from django.db.models import Q
 from med.forms import JoinHospitalForm
@@ -161,6 +161,23 @@ class CreateHospitalView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.manager = self.request.user
         return super().form_valid(form)
+
+class List_Create_CompanyView(LoginRequiredMixin, CreateView):
+    model = Company
+    template_name = 'med/list_create_company.html'
+    form_class = CreateCompanyForm
+    success_url = reverse_lazy('list-create-company')
+
+    def form_valid(self, form):
+        eng_hos = Engineer.objects.get(id = self.request.user.id).current_hospital
+        form.instance.hospital = eng_hos
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        eng_hos = Engineer.objects.get(id = self.request.user.id).current_hospital
+        context["companies"] = Company.objects.filter(hospital = eng_hos)
+        return context
 
 def generate_PDF(request, pk):
     data = {}

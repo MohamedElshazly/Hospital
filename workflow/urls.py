@@ -9,7 +9,9 @@ from .views import (
                     Work_Process,
                     Ticket_Details, 
                     Add_Department,
+                    update_department,
                     Add_Equipment,
+                    update_equipment,
                     Staff_Response)
 
 urlpatterns = [
@@ -23,5 +25,7 @@ urlpatterns = [
     path('staff-response/', Staff_Response.as_view(), name = 'staff-response'),
     path('work-process/<int:pk>/<int:pk2>', Work_Process, name='work-process'),
     path('add-department/', Add_Department.as_view(), name='add-department'),
+    path('edit-department/<int:pk>/', update_department, name='edit-department'),
+    path('edit-equipment/<int:pk>/', update_equipment, name='edit-equipment'),
     path('add-equipment/', Add_Equipment.as_view(), name='add-equipment')
 ]
